@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlotPoint Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .map-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .map-scroll::-webkit-scrollbar-track { background: #f9fafb; border-radius: 4px; }
+        .map-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .map-scroll::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        @keyframes growUp {
+            from { height: 0; }
+            to { height: var(--target-height); }
+        }
+        .bar-grow {
+            animation: growUp 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-[#f4f5f7] text-gray-900 h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased selection:bg-[#377f3e]/20 selection:text-[#1e6b41]">
+
+    <aside class="w-full md:w-[260px] bg-[#1e6b41] text-white flex flex-col shrink-0 md:h-full md:rounded-r-3xl shadow-lg z-20">
+        <div class="p-6 md:p-8 flex items-center gap-3">
+            <div class="flex items-center justify-center">
+                <img src="PltPntLogo.png" alt="PlotPoint Logo" class="h-10 w-auto object-contain">
+            </div>
+            <h1 class="text-2xl font-semibold tracking-tight">PlotPoint</h1>
+        </div>
+
+        <div class="flex-1 px-4 md:px-6 overflow-y-auto pb-6 space-y-8">
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">Menu</h2>
+                <nav class="space-y-1">
+                    <a href="Dashboard.html" class="flex items-center gap-3 px-4 py-3 text-white bg-white/20 rounded-xl transition-colors text-base font-medium shadow-sm border border-white/10">
+                        <iconify-icon icon="solar:widget-linear" stroke-width="1.5" class="text-xl text-gray-900"></iconify-icon>
+                        Dashboard
+                    </a>
+                    <a href="Record.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:folder-with-files-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Record
+                    </a>
+                    <a href="Map.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:map-point-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Map
+                    </a>
+                </nav>
+            </div>
+
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">General</h2>
+                <nav class="space-y-1">
+                    <a href="Setting.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:settings-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Setting
+                    </a>
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:logout-2-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+        <!-- Top Bar (Search & Profile) -->
+        <header class="bg-white rounded-[24px] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.04)] m-4 p-2 pl-4 pr-3 flex items-center justify-between shrink-0">
+            <!-- Search Container -->
+            <div class="relative flex-1 max-w-lg flex items-center bg-gray-50/50 rounded-full border border-transparent focus-within:border-gray-200 focus-within:bg-white transition-all">
+                <i data-lucide="search" class="absolute left-4 w-5 h-5 text-gray-400" stroke-width="1.5"></i>
+                <input type="text" placeholder="Search name or house number" class="w-full bg-transparent pl-12 pr-4 py-2.5 text-base text-gray-700 placeholder-gray-400 focus:outline-none rounded-full">
+            </div>
+
+            <!-- Profile Section -->
+            <div class="flex items-center gap-3 pl-4 border-l border-gray-100 ml-4">
+                <div class="hidden sm:flex flex-col items-end">
+                    <span class="text-sm font-medium text-gray-900 leading-tight">Jigo Tapia</span>
+                    <span class="text-xs text-gray-500">jigotapia@gmail.com</span>
+                </div>
+                <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+            </div>
+        </header>
+
+        <section id="dashboard-view" class="flex-1 p-4 md:p-6 overflow-y-auto">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col min-h-full transition-all duration-300">
+
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-semibold tracking-tight text-[#1e6b41]">Statistic</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
+                            <iconify-icon icon="solar:users-group-rounded-linear" class="text-2xl text-yellow-600"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Total Residents</p>
+                        <p class="text-3xl font-semibold tracking-tight text-gray-900">1,654</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mb-4">
+                            <iconify-icon icon="solar:home-2-linear" class="text-2xl text-emerald-600"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Total Houses</p>
+                        <p class="text-3xl font-semibold tracking-tight text-gray-900">826</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                            <iconify-icon icon="solar:shield-check-linear" class="text-2xl text-green-600"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Occupied</p>
+                        <p class="text-3xl font-semibold tracking-tight text-gray-900">698</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-14 h-14 rounded-full bg-teal-100 flex items-center justify-center mb-4">
+                            <iconify-icon icon="solar:home-smile-linear" class="text-2xl text-teal-600"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Vacant</p>
+                        <p class="text-3xl font-semibold tracking-tight text-gray-900">128</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
+                    <div class="lg:col-span-2 bg-gray-50/50 rounded-2xl p-8 border border-gray-100 flex flex-col">
+                        <div class="flex-1 flex items-end justify-between gap-4 px-4 pb-4 border-b border-gray-200 mt-8 relative">
+                            <div class="flex flex-col items-center flex-1 group h-full justify-end">
+                                <div class="w-full max-w-[60px] bg-yellow-400 rounded-t-lg transition-all duration-500 relative bar-grow" style="height: 90%; --target-height: 90%;">
+                                    <div class="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs font-medium transition-opacity pointer-events-none whitespace-nowrap">1,654</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 group h-full justify-end">
+                                <div class="w-full max-w-[60px] bg-[#1c8a38] rounded-t-lg transition-all duration-500 relative bar-grow" style="height: 45%; --target-height: 45%;">
+                                    <div class="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs font-medium transition-opacity pointer-events-none whitespace-nowrap">826</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 group h-full justify-end">
+                                <div class="w-full max-w-[60px] bg-emerald-400 rounded-t-lg transition-all duration-500 relative bar-grow" style="height: 38%; --target-height: 38%;">
+                                    <div class="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs font-medium transition-opacity pointer-events-none whitespace-nowrap">698</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 group h-full justify-end">
+                                <div class="w-full max-w-[60px] bg-[#229978] rounded-t-lg transition-all duration-500 relative bar-grow" style="height: 15%; --target-height: 15%;">
+                                    <div class="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs font-medium transition-opacity pointer-events-none whitespace-nowrap">128</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between px-2 pt-6 text-center">
+                            <div class="flex-1"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Residents</span></div>
+                            <div class="flex-1"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Houses</span></div>
+                            <div class="flex-1"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Occupied</span></div>
+                            <div class="flex-1"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Vacant</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm flex flex-col">
+                        <h3 class="text-lg font-semibold tracking-tight text-gray-900 mb-6 flex items-center gap-2">
+                            <iconify-icon icon="solar:bell-bing-linear" class="text-[#377f3e]"></iconify-icon>
+                            Reminders
+                        </h3>
+                        <div class="flex-1 overflow-y-auto pr-2 map-scroll">
+                            <ul class="space-y-4">
+                                <li class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                    <p class="text-sm font-semibold text-gray-800">Update Resident Records</p>
+                                    <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1">
+                                        <iconify-icon icon="solar:calendar-linear"></iconify-icon> Weekly (Friday)
+                                    </p>
+                                </li>
+                                <li class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                    <p class="text-sm font-semibold text-gray-800">Verify Occupancy Status</p>
+                                    <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1">
+                                        <iconify-icon icon="solar:calendar-linear"></iconify-icon> Monthly (15th)
+                                    </p>
+                                </li>
+                                <li class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                    <p class="text-sm font-semibold text-gray-800">Schedule Community Meeting</p>
+                                    <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1">
+                                        <iconify-icon icon="solar:calendar-linear"></iconify-icon> Monthly (25th)
+                                    </p>
+                                </li>
+                                <li class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                    <p class="text-sm font-semibold text-gray-800">Maintenance Follow-up</p>
+                                    <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1">
+                                        <iconify-icon icon="solar:clock-circle-linear"></iconify-icon> Within 3 days
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

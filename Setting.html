@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlotPoint - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="bg-[#f4f5f7] text-gray-900 h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-[260px] bg-[#1e6b41] text-white flex flex-col shrink-0 md:h-full md:rounded-r-3xl shadow-lg z-20">
+        <div class="p-6 md:p-8 flex items-center gap-3">
+            <div class="flex items-center justify-center">
+                <img src="PltPntLogo.png" alt="PlotPoint Logo" class="h-10 w-auto object-contain">
+            </div>
+            <h1 class="text-2xl font-semibold tracking-tight">PlotPoint</h1>
+        </div>
+
+        <div class="flex-1 px-4 md:px-6 overflow-y-auto pb-6 space-y-8">
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">Menu</h2>
+                <nav class="space-y-1">
+                    <a href="Dashboard.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:widget-linear" class="text-xl opacity-70"></iconify-icon>
+                        Dashboard
+                    </a>
+                    <a href="Record.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:folder-with-files-linear" class="text-xl opacity-70"></iconify-icon>
+                        Record
+                    </a>
+                    <a href="Map.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:map-point-linear" class="text-xl opacity-70"></iconify-icon>
+                        Map
+                    </a>
+                </nav>
+            </div>
+
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">General</h2>
+                <nav class="space-y-1">
+                    <a href="Setting.html" class="flex items-center gap-3 px-4 py-3 text-white bg-white/20 rounded-xl transition-colors text-base font-medium shadow-sm border border-white/10">
+                        <iconify-icon icon="solar:settings-linear" class="text-xl text-white"></iconify-icon>
+                        Settings
+                    </a>
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:logout-2-linear" class="text-xl opacity-70"></iconify-icon>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto p-4 md:p-8 lg:p-12">
+
+        <div class="max-w-4xl mx-auto w-full">
+            <!-- Settings Container -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+
+                <!-- Header -->
+                <div class="p-6 md:p-8 border-b border-gray-100">
+                    <h2 class="text-2xl font-semibold tracking-tight text-gray-900">Settings</h2>
+                    <p class="text-base text-gray-500 mt-1">Manage your account settings and preferences.</p>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="p-6 md:p-8 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-16 h-16 rounded-full object-cover shadow-sm border border-gray-100">
+                        <div>
+                            <h3 id="display-name" class="text-lg font-semibold text-gray-900 tracking-tight">Jigo Tapia</h3>
+                            <p id="display-email" class="text-base text-gray-500 mt-0.5">jigotapia@gmail.com</p>
+                        </div>
+                    </div>
+                    <button type="button" class="bg-[#1e6b41] hover:bg-[#165031] text-white px-6 py-2.5 rounded-lg text-base font-medium transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1e6b41] w-full sm:w-auto">
+                        Edit
+                    </button>
+                </div>
+
+                <!-- Full Name Form Group -->
+                <div class="p-6 md:p-8 border-b border-gray-100">
+                    <label class="block text-base font-semibold text-gray-900 mb-4">Full Name</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <input type="text" id="firstName" value="Jigo" placeholder="Your First Name" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#1e6b41] focus:ring-1 focus:ring-[#1e6b41] transition-shadow shadow-sm">
+                        </div>
+                        <div>
+                            <input type="text" id="lastName" value="Tapia" placeholder="Your Last Name" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#1e6b41] focus:ring-1 focus:ring-[#1e6b41] transition-shadow shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Form Group -->
+                <div class="p-6 md:p-8 border-b border-gray-100">
+                    <label class="block text-base font-semibold text-gray-900 mb-4">Email Address</label>
+                    <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+                        <div class="w-full md:w-1/2">
+                            <input type="email" id="emailAddress" value="jigotapia@gmail.com" placeholder="Enter Email Address" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#1e6b41] focus:ring-1 focus:ring-[#1e6b41] transition-shadow shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subdivision Settings Form Group -->
+                <div class="p-6 md:p-8 bg-gray-50/50">
+                    <h3 class="text-lg font-semibold text-gray-900 tracking-tight mb-5">Subdivision Settings</h3>
+                    <label class="block text-base font-semibold text-gray-900 mb-3">Subdivision Name</label>
+
+                    <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+                        <div class="w-full md:w-1/2">
+                            <input type="text" id="subdivisionName" value="Green Pines" placeholder="Enter Subdivision Name" class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#1e6b41] focus:ring-1 focus:ring-[#1e6b41] transition-shadow shadow-sm">
+                        </div>
+                        <button id="update-settings-btn" type="button" class="bg-[#1e6b41] hover:bg-[#165031] text-white px-8 py-3 rounded-lg text-base font-medium transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1e6b41] whitespace-nowrap w-full sm:w-auto flex items-center justify-center gap-2">
+                            <span>Save Changes</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons with specified stroke width
+        lucide.createIcons({
+            attrs: {
+                'stroke-width': 1.5
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveButton = document.getElementById('update-settings-btn');
+
+            // Input elements
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const emailInput = document.getElementById('emailAddress');
+            const subdivInput = document.getElementById('subdivisionName');
+
+            // UI elements to update
+            const displayName = document.getElementById('display-name');
+            const displayEmail = document.getElementById('display-email');
+
+            saveButton.addEventListener('click', () => {
+                // 1. Data Collection
+                const newSettings = {
+                    firstName: firstNameInput.value.trim(),
+                    lastName: lastNameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    subdivision: subdivInput.value.trim()
+                };
+
+                // 2. State Update (Updating UI immediately to reflect changes)
+                if(newSettings.firstName || newSettings.lastName) {
+                    displayName.textContent = `${newSettings.firstName} ${newSettings.lastName}`.trim();
+                }
+                if(newSettings.email) {
+                    displayEmail.textContent = newSettings.email;
+                }
+
+                // Simulate saving to local storage
+                localStorage.setItem('userPreferences', JSON.stringify(newSettings));
+
+                // 3. Provide User Confirmation (Visual Feedback)
+                const originalContent = saveButton.innerHTML;
+                const originalClasses = saveButton.className;
+
+                // Change button appearance to indicate success
+                saveButton.className = "bg-emerald-600 text-white px-8 py-3 rounded-lg text-base font-medium transition-all shadow-sm focus:outline-none whitespace-nowrap w-full sm:w-auto flex items-center justify-center gap-2";
+                saveButton.innerHTML = `
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    <span>Saved!</span>
+                `;
+
+                // Re-initialize icon for the newly injected HTML
+                lucide.createIcons({
+                    attrs: { 'stroke-width': 1.5 }
+                });
+
+                // Revert button back to original state after 2 seconds
+                setTimeout(() => {
+                    saveButton.className = originalClasses;
+                    saveButton.innerHTML = originalContent;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlotPoint Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for the map area */
+        .map-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .map-scroll::-webkit-scrollbar-track { background: #f9fafb; border-radius: 4px; }
+        .map-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .map-scroll::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="bg-[#f4f5f7] text-gray-900 h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased selection:bg-[#377f3e]/20 selection:text-[#1e6b41]">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-[260px] bg-[#1e6b41] text-white flex flex-col shrink-0 md:h-full md:rounded-r-3xl shadow-lg z-20">
+        <div class="p-6 md:p-8 flex items-center gap-3">
+            <div class="flex items-center justify-center">
+                <img src="PltPntLogo.png" alt="PlotPoint Logo" class="h-10 w-auto object-contain">
+            </div>
+            <h1 class="text-2xl font-semibold tracking-tight">PlotPoint</h1>
+        </div>
+
+        <div class="flex-1 px-4 md:px-6 overflow-y-auto pb-6 space-y-8">
+            <!-- Menu Section -->
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">Menu</h2>
+                <nav class="space-y-1">
+                    <a href="Dashboard.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:widget-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Dashboard
+                    </a>
+                    <a href="Record.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:folder-with-files-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Record
+                    </a>
+                    <a href="Map.html" class="flex items-center gap-3 px-4 py-3 text-white bg-white/20 rounded-xl transition-colors text-base font-medium shadow-sm border border-white/10">
+                        <iconify-icon icon="solar:map-point-linear" stroke-width="1.5" class="text-xl text-gray-900"></iconify-icon>
+                        Map
+                    </a>
+                </nav>
+            </div>
+
+            <!-- General Section -->
+            <div>
+                <h2 class="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 px-2">General</h2>
+                <nav class="space-y-1">
+                    <a href="Setting.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:settings-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Setting
+                    </a>
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl transition-colors text-base font-medium">
+                        <iconify-icon icon="solar:logout-2-linear" stroke-width="1.5" class="text-xl opacity-70"></iconify-icon>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative z-10">
+
+        <!-- Header -->
+        <!-- Top Bar (Search & Profile) -->
+        <header class="bg-white rounded-[24px] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.04)] m-4 p-2 pl-4 pr-3 flex items-center justify-between shrink-0">
+            <!-- Search Container -->
+            <div class="relative flex-1 max-w-lg flex items-center bg-gray-50/50 rounded-full border border-transparent focus-within:border-gray-200 focus-within:bg-white transition-all">
+                <i data-lucide="search" class="absolute left-4 w-5 h-5 text-gray-400" stroke-width="1.5"></i>
+                <input type="text" placeholder="Search name or house number" class="w-full bg-transparent pl-12 pr-4 py-2.5 text-base text-gray-700 placeholder-gray-400 focus:outline-none rounded-full">
+            </div>
+
+            <!-- Profile Section -->
+            <div class="flex items-center gap-3 pl-4 border-l border-gray-100 ml-4">
+                <div class="hidden sm:flex flex-col items-end">
+                    <span class="text-sm font-medium text-gray-900 leading-tight">Jigo Tapia</span>
+                    <span class="text-xs text-gray-500">jigotapia@gmail.com</span>
+                </div>
+                <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+            </div>
+        </header>
+
+        <!-- Map Container -->
+        <div class="flex-1 p-4 md:p-6 overflow-hidden flex flex-col">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex-1 flex flex-col overflow-hidden relative">
+
+                <!-- Map Header -->
+                <div class="p-6 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-50 shrink-0">
+                    <div>
+                        <h2 class="text-2xl font-semibold tracking-tight text-[#1e6b41]">MAP</h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                                <span class="w-3 h-3 rounded-sm bg-[#377f3e]"></span> Occupied
+                            </span>
+                            <span class="text-gray-300 text-sm">|</span>
+                            <span class="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                                <span class="w-3 h-3 rounded-sm bg-[#d1d1d1]"></span> Vacant
+                            </span>
+                            <span class="text-gray-300 text-sm">|</span>
+                            <span class="text-sm font-medium text-gray-500">Click a plot to view or edit details</span>
+                        </div>
+                    </div>
+                    <button id="mainAddRecordBtn" class="bg-[#377f3e] hover:bg-[#2e6b34] text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all shadow-sm active:scale-95 shrink-0">
+                        <iconify-icon icon="solar:add-circle-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+                        New Record
+                    </button>
+                </div>
+
+                <!-- Interactive Map Area -->
+                <div class="flex-1 bg-gray-50/50 p-6 md:p-8 overflow-auto map-scroll flex items-start justify-start md:items-center md:justify-center min-h-[400px]">
+
+                    <!-- Schematic Wrapper (Expanded Map) -->
+                    <div class="bg-[#e5e5e5] p-5 lg:p-8 rounded-lg flex flex-wrap lg:flex-nowrap justify-center gap-5 lg:gap-8 relative shadow-inner min-w-max mx-auto">
+
+                        <!-- Column 1 -->
+                        <div class="flex flex-col gap-5 lg:gap-8 relative z-10">
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="101"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="102"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="103"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="104"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="105"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="106"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="107"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="108"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="109"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="110"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="111"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="112"></div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2 -->
+                        <div class="flex flex-col gap-5 lg:gap-8 relative z-10">
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="113"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="114"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="115"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="116"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="117"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="118"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="119"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="120"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="121"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="122"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="123"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="124"></div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3 -->
+                        <div class="flex flex-col gap-5 lg:gap-8 relative z-10">
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="125"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="126"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="127"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="128"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="129"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="130"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="131"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="132"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="133"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="134"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="135"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="136"></div>
+                            </div>
+                        </div>
+
+                        <!-- Column 4 -->
+                        <div class="flex flex-col gap-5 lg:gap-8 relative z-10">
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="137"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="138"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="139"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="140"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="141"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="142"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="143"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="144"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-md shadow-sm grid grid-cols-2 gap-3">
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="145"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="146"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="147"></div>
+                                <div class="plot w-16 h-16 rounded-sm cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border border-black/5" data-id="148"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Overlay Modal -->
+        <div id="detailsModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md mx-4 overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]" id="modalContent">
+                <div class="p-5 md:p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 shrink-0">
+                    <h3 class="text-xl font-semibold tracking-tight text-gray-900" id="modalTitle">Plot Details</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-700 bg-white hover:bg-gray-100 p-2 rounded-full transition-colors border border-gray-200 shadow-sm flex items-center justify-center">
+                        <iconify-icon icon="solar:close-circle-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+                    </button>
+                </div>
+
+                <div class="p-5 md:p-6 space-y-5 overflow-y-auto">
+                    <div id="modalStatusContainer" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Lot Number</p>
+                            <p class="text-base font-medium text-gray-900" id="modalLotNumber">-</p>
+                        </div>
+
+                        <div id="ownerSection" class="transition-all">
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Owner Name</p>
+                            <!-- View Mode -->
+                            <p class="text-base font-medium text-gray-900" id="modalOwnerName">-</p>
+                            <!-- Edit Mode -->
+                            <input type="text" id="editOwnerName" class="hidden w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#377f3e]/20 focus:border-[#377f3e] transition-all font-medium mt-1" placeholder="Enter owner's full name">
+                        </div>
+
+                        <div id="contactSection" class="transition-all">
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Contact Details</p>
+                            <!-- View Mode -->
+                            <p class="text-base font-medium text-gray-900" id="modalContact">-</p>
+                            <!-- Edit Mode -->
+                            <input type="text" id="editContact" class="hidden w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#377f3e]/20 focus:border-[#377f3e] transition-all font-medium mt-1" placeholder="e.g., (555) 123-4567">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 md:p-5 bg-gray-50 border-t border-gray-100 flex justify-end shrink-0 gap-3">
+                    <button id="modalCancelBtn" class="hidden bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full sm:w-auto">
+                        Cancel
+                    </button>
+                    <button id="modalActionBtn" class="bg-[#377f3e] hover:bg-[#2e6b34] text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full sm:w-auto flex items-center justify-center gap-2">
+                        <!-- Text injected via JS -->
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 font-medium text-sm">
+            <iconify-icon icon="solar:info-circle-linear" class="text-xl text-blue-400"></iconify-icon>
+            <span id="toastMessage">Message goes here</span>
+        </div>
+
+    </main>
+
+    <script>
+        // Expanded Master Data Array (48 Plots)
+        let masterData = [];
+        for (let i = 101; i <= 148; i++) {
+            // Seed some random initial data for realism
+            const isOccupied = Math.random() > 0.5;
+            masterData.push({
+                id: i.toString(),
+                isOccupied: isOccupied,
+                owner: isOccupied ? `Owner ${i}` : '',
+                contact: isOccupied ? `(555) 000-${i}` : '',
+                houseNumber: i.toString()
+            });
+        }
+
+        // Manual overrides for a few recognizable names
+        masterData.find(d => d.id === '101').owner = 'Sarah Connor';
+        masterData.find(d => d.id === '101').isOccupied = true;
+        masterData.find(d => d.id === '103').owner = 'John Wick';
+        masterData.find(d => d.id === '103').isOccupied = true;
+        masterData.find(d => d.id === '115').owner = 'Diana Prince';
+        masterData.find(d => d.id === '115').isOccupied = true;
+        masterData.find(d => d.id === '132').owner = 'Bruce Wayne';
+        masterData.find(d => d.id === '132').isOccupied = true;
+
+        const plots = document.querySelectorAll('.plot');
+
+        // Render Map Colors
+        function renderMap() {
+            plots.forEach(plot => {
+                const plotId = plot.getAttribute('data-id');
+                const data = masterData.find(d => d.id === plotId);
+
+                // Clear previous state classes
+                plot.classList.remove('bg-[#377f3e]', 'bg-[#d1d1d1]');
+
+                if (data && data.isOccupied) {
+                    plot.classList.add('bg-[#377f3e]');
+                    plot.title = `Lot ${plotId} - Occupied\nOwner: ${data.owner}`;
+                } else {
+                    plot.classList.add('bg-[#d1d1d1]');
+                    plot.title = `Lot ${plotId} - Vacant`;
+                }
+            });
+        }
+
+        renderMap();
+
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            plots.forEach(plot => {
+                const plotId = plot.getAttribute('data-id');
+                const data = masterData.find(d => d.id === plotId);
+
+                let matches = false;
+                if (data) {
+                    if (data.owner && data.owner.toLowerCase().includes(searchTerm)) matches = true;
+                    if (data.houseNumber && data.houseNumber.includes(searchTerm)) matches = true;
+                    if (data.id.includes(searchTerm)) matches = true;
+                }
+
+                if (searchTerm === '' || matches) {
+                    plot.classList.remove('opacity-20', 'scale-95');
+                    plot.classList.add('hover:scale-105');
+                    if (matches && searchTerm !== '') {
+                         plot.classList.add('ring-4', 'ring-[#377f3e]/40', 'ring-offset-2');
+                    } else {
+                         plot.classList.remove('ring-4', 'ring-[#377f3e]/40', 'ring-offset-2');
+                    }
+                } else {
+                    plot.classList.add('opacity-20', 'scale-95');
+                    plot.classList.remove('hover:scale-105', 'ring-4', 'ring-[#377f3e]/40', 'ring-offset-2');
+                }
+            });
+        });
+
+        // Modal Elements & State
+        const modal = document.getElementById('detailsModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        const mTitle = document.getElementById('modalTitle');
+        const mStatusContainer = document.getElementById('modalStatusContainer');
+        const mLotNum = document.getElementById('modalLotNumber');
+
+        const mOwnerSection = document.getElementById('ownerSection');
+        const mOwnerName = document.getElementById('modalOwnerName');
+        const editOwnerName = document.getElementById('editOwnerName');
+
+        const mContactSection = document.getElementById('contactSection');
+        const mContact = document.getElementById('modalContact');
+        const editContact = document.getElementById('editContact');
+
+        const mActionBtn = document.getElementById('modalActionBtn');
+        const mCancelBtn = document.getElementById('modalCancelBtn');
+
+        let currentPlotId = null;
+        let isEditing = false;
+
+        // Toast Notification Function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        document.getElementById('mainAddRecordBtn').addEventListener('click', () => {
+            showToast("Please click on a vacant plot (gray) on the map to add a new record.");
+        });
+
+        // Switch to View Mode UI
+        function setViewMode(data) {
+            isEditing = false;
+
+            // Hide Inputs, Show Text
+            editOwnerName.classList.add('hidden');
+            editContact.classList.add('hidden');
+            mOwnerName.classList.remove('hidden');
+            mContact.classList.remove('hidden');
+            mCancelBtn.classList.add('hidden');
+            mTitle.textContent = "Plot Details";
+
+            mLotNum.textContent = data.id;
+
+            if (data.isOccupied) {
+                mStatusContainer.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-green-50 text-green-700 border border-green-200/50 mb-2';
+                mStatusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500"></span> Occupied`;
+
+                mOwnerSection.classList.remove('hidden');
+                mContactSection.classList.remove('hidden');
+                mOwnerName.textContent = data.owner || 'Unknown';
+                mContact.textContent = data.contact || 'No contact on file';
+
+                mActionBtn.innerHTML = '<iconify-icon icon="solar:pen-linear" class="text-lg"></iconify-icon> Edit Record';
+                mActionBtn.className = 'bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full sm:w-auto flex items-center justify-center gap-2';
+            } else {
+                mStatusContainer.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200 mb-2';
+                mStatusContainer.innerHTML = `<span class="w-2 h-2 rounded-full bg-gray-400"></span> Plot Available`;
+
+                mOwnerSection.classList.add('hidden');
+                mContactSection.classList.add('hidden');
+
+                mActionBtn.innerHTML = '<iconify-icon icon="solar:add-circle-linear" class="text-lg"></iconify-icon> Add Record';
+                mActionBtn.className = 'bg-[#377f3e] hover:bg-[#2e6b34] text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full sm:w-auto flex items-center justify-center gap-2';
+            }
+        }
+
+        // Switch to Edit Mode UI
+        function setEditMode() {
+            isEditing = true;
+            const data = masterData.find(d => d.id === currentPlotId);
+
+            mTitle.textContent = data.isOccupied ? "Edit Record" : "New Record";
+
+            // Show fields even if vacant
+            mOwnerSection.classList.remove('hidden');
+            mContactSection.classList.remove('hidden');
+
+            // Hide Text, Show Inputs
+            mOwnerName.classList.add('hidden');
+            mContact.classList.add('hidden');
+            editOwnerName.classList.remove('hidden');
+            editContact.classList.remove('hidden');
+            mCancelBtn.classList.remove('hidden');
+
+            // Pre-fill inputs
+            editOwnerName.value = data.owner || '';
+            editContact.value = data.contact || '';
+
+            // Focus first input
+            setTimeout(() => editOwnerName.focus(), 100);
+
+            mActionBtn.innerHTML = '<iconify-icon icon="solar:diskette-linear" class="text-lg"></iconify-icon> Save Record';
+            mActionBtn.className = 'bg-[#377f3e] hover:bg-[#2e6b34] text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-sm w-full sm:w-auto flex items-center justify-center gap-2';
+        }
+
+        // Save Data Logic
+        function saveRecord() {
+            const index = masterData.findIndex(d => d.id === currentPlotId);
+            if (index !== -1) {
+                const newOwner = editOwnerName.value.trim();
+                const newContact = editContact.value.trim();
+
+                masterData[index].owner = newOwner;
+                masterData[index].contact = newContact;
+                // If owner is provided, it's occupied. If cleared entirely, make it vacant.
+                masterData[index].isOccupied = newOwner.length > 0;
+
+                renderMap();
+                setViewMode(masterData[index]);
+                showToast("Record saved successfully!");
+            }
+        }
+
+        // Action Button Click Handler (Toggles Edit/Save)
+        mActionBtn.addEventListener('click', () => {
+            if (!isEditing) {
+                setEditMode();
+            } else {
+                saveRecord();
+            }
+        });
+
+        // Cancel Button Handler
+        mCancelBtn.addEventListener('click', () => {
+            const data = masterData.find(d => d.id === currentPlotId);
+            setViewMode(data);
+        });
+
+        // Open Modal
+        function openModal(data) {
+            currentPlotId = data.id;
+            setViewMode(data);
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        // Close Modal
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                isEditing = false;
+            }, 300);
+        }
+
+        // Attach Clicks to Plots
+        plots.forEach(plot => {
+            plot.addEventListener('click', (e) => {
+                const plotId = e.currentTarget.getAttribute('data-id');
+                const data = masterData.find(d => d.id === plotId);
+                if (data) openModal(data);
+            });
+        });
+
+        // Modal Close Triggers
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            // Close if clicking outside the modal content and not currently editing
+            if (e.target === modal && !isEditing) closeModal();
+        });
+
+    </script>
+</body>
+</html>
